@@ -1,0 +1,59 @@
+{% load static %}
+
+<nav class="navbar navbar-expand-lg navbar-dark custom-navbar fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="{% url 'index' %}">
+      <img src="{% static 'img/logo.jpeg' %}" height="80" />
+    </a>
+
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav ms-auto">
+        {% if user.is_authenticated %}
+
+        <li class="nav-item">
+          <a class="nav-link" href="#">Dashboard</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'cargar_datos' %}">Cargar</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'analisis_tecnico' %}">Análisis</a>
+        </li>
+
+        <li class="nav-item">
+          <span class="nav-link text-info"> 👤 {{ user.username }} </span>
+        </li>
+
+        <li class="nav-item">
+          <a class="btn btn-danger btn-sm" href="{% url 'logout' %}"> Salir </a>
+        </li>
+
+        {% else %}
+
+        <li class="nav-item">
+          <button
+            class="btn btn-success btn-sm"
+            data-bs-toggle="modal"
+            data-bs-target="#loginModal"
+          >
+            Login
+          </button>
+        </li>
+
+        <li class="nav-item ms-2">
+          <button
+            class="btn btn-primary btn-sm"
+            data-bs-toggle="modal"
+            data-bs-target="#registroModal"
+          >
+            Registro
+          </button>
+        </li>
+
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>

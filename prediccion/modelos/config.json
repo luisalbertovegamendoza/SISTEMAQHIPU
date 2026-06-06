@@ -1,0 +1,18 @@
+{
+    "window_size": 60,
+    "features": [
+        "apertura",
+        "maximo",
+        "minimo",
+        "cierre",
+        "volumen",
+        "sma_10",
+        "sma_30",
+        "retorno",
+        "volatilidad",
+        "ema_10",
+        "rsi",
+        "macd"
+    ],
+    "target": "cierre"
+}

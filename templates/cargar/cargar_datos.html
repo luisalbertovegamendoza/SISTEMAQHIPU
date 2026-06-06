@@ -1,0 +1,562 @@
+{% extends 'base.html' %} {% block content %}
+
+<style>
+  /* =========================
+   BASE LAYOUT
+========================= */
+
+  :root {
+    --text: #e5e7eb;
+    --text-soft: #94a3b8;
+    --primary: #3b82f6;
+    --bg: #020617;
+  }
+
+  /* =========================
+ DARK THEME FIX
+========================= */
+
+  body {
+    background: #020617;
+    color: #e5e7eb;
+  }
+
+  /* CARDS */
+  .card {
+    background: rgba(15, 23, 42, 0.82);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 18px;
+    padding: 22px;
+    backdrop-filter: blur(14px);
+    color: #e5e7eb;
+  }
+
+  /* TITLES */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: #f8fafc;
+  }
+
+  /* TEXT */
+  p,
+  span,
+  div,
+  label,
+  li,
+  small {
+    color: #cbd5e1;
+  }
+
+  /* BUTTONS */
+  .btn {
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
+    color: white !important;
+    border: none;
+    padding: 12px 18px;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: 0.3s;
+    text-decoration: none;
+  }
+
+  .btn:hover {
+    transform: translateY(-2px);
+    opacity: 0.95;
+  }
+
+  /* INPUTS */
+  input,
+  select,
+  textarea {
+    background: rgba(15, 23, 42, 0.9);
+    color: #f8fafc;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: #94a3b8;
+  }
+
+  /* TABLE FIX */
+  .table-wrapper table {
+    background: transparent;
+  }
+
+  .table-wrapper tr:nth-child(even) {
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  /* PANDAS TABLES */
+  table.dataframe {
+    color: #e5e7eb !important;
+  }
+
+  table.dataframe th {
+    background: #0f172a !important;
+    color: #f8fafc !important;
+  }
+
+  table.dataframe td {
+    color: #cbd5e1 !important;
+  }
+
+  .dashboard {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+    padding: 100px 20px 40px;
+    max-width: 1200px;
+    margin: auto;
+  }
+
+  /* =========================
+   TOP ACTION BAR
+========================= */
+  .top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  /* =========================
+   KPI SECTION
+========================= */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+
+  .kpi-card {
+    background: rgba(15, 23, 42, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 18px;
+    text-align: center;
+    backdrop-filter: blur(15px);
+  }
+
+  .kpi-value {
+    font-size: 28px;
+    font-weight: 700;
+  }
+
+  .kpi-title {
+    font-size: 12px;
+    text-transform: uppercase;
+    color: #94a3b8;
+  }
+
+  /* =========================
+   GRID MAIN
+========================= */
+  .grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 18px;
+  }
+
+  /* =========================
+   CARDS
+========================= */
+
+  .title {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: #e2e8f0;
+  }
+
+  /* =========================
+   UPLOAD BOX
+========================= */
+  .upload-box {
+    border: 2px dashed rgba(59, 130, 246, 0.6);
+    padding: 40px;
+    border-radius: 14px;
+    text-align: center;
+    cursor: pointer;
+    background: rgba(30, 41, 59, 0.3);
+    transition: 0.3s;
+  }
+
+  .upload-box:hover {
+    border-color: #3b82f6;
+    background: rgba(59, 130, 246, 0.08);
+  }
+
+  /* =========================
+   TABLE
+========================= */
+
+  .table-wrapper {
+    overflow: auto;
+    max-height: 420px;
+    border-radius: 12px;
+  }
+
+  /* TABLA BASE */
+  .table-wrapper table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed; /* 🔥 CLAVE */
+    min-width: 800px;
+  }
+
+  /* HEADER + CELDAS ALINEADAS */
+  .table-wrapper th,
+  .table-wrapper td {
+    text-align: center; /* o left si prefieres estilo Excel */
+    vertical-align: middle;
+    padding: 12px 10px;
+    white-space: nowrap;
+  }
+
+  /* HEADER */
+  .table-wrapper th {
+    position: sticky;
+    top: 0;
+    background: #0f172a;
+    color: #f8fafc;
+    font-size: 12px;
+    text-transform: uppercase;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  /* CELDAS */
+  .table-wrapper td {
+    color: #cbd5e1;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  /* HOVER */
+  .table-wrapper tr:hover {
+    background: rgba(59, 130, 246, 0.1);
+  }
+
+  /* =========================
+   RESPONSIVE
+========================= */
+  @media (max-width: 900px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+
+    .kpi-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .status-badge {
+    padding: 10px 14px;
+    border-radius: 12px;
+    margin-bottom: 15px;
+    font-weight: 600;
+    font-size: 13px;
+    display: inline-block;
+  }
+
+  .status-badge.clean {
+    background: rgba(34, 197, 94, 0.15);
+    border: 1px solid rgba(34, 197, 94, 0.4);
+    color: #86efac;
+  }
+
+  .status-badge.raw {
+    background: rgba(239, 68, 68, 0.12);
+    border: 1px solid rgba(239, 68, 68, 0.4);
+    color: #fca5a5;
+  }
+
+  /* texto general fuera de clases */
+  p,
+  span,
+  div {
+    color: inherit;
+  }
+
+  /* fuerza consistencia visual */
+  body {
+    color: #e5e7eb;
+  }
+
+  .upload-box {
+    color: #e5e7eb;
+    font-weight: 500;
+    font-size: 14px;
+    letter-spacing: 0.2px;
+  }
+
+  /* =========================
+DATASET STATUS
+========================= */
+
+  .dataset-status {
+    padding: 14px 18px;
+    border-radius: 14px;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .dataset-status.loaded {
+    background: rgba(34, 197, 94, 0.12);
+    border: 1px solid rgba(34, 197, 94, 0.35);
+    color: #86efac;
+  }
+
+  .dataset-status.empty {
+    background: rgba(251, 191, 36, 0.12);
+    border: 1px solid rgba(251, 191, 36, 0.35);
+    color: #fde68a;
+  }
+
+  /* =========================
+FILE LOADED
+========================= */
+
+  .file-loaded {
+    margin-top: 14px;
+    padding: 12px;
+    border-radius: 10px;
+    background: rgba(59, 130, 246, 0.08);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    color: #bfdbfe;
+    font-size: 13px;
+  }
+
+  /* =========================
+LOADER
+========================= */
+
+  .loader {
+    margin-top: 15px;
+    color: #60a5fa;
+    font-size: 14px;
+    animation: pulse 1s infinite;
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  @keyframes pulse {
+    0% {
+      opacity: 0.4;
+    }
+    50% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0.4;
+    }
+  }
+
+  /* =========================
+UPLOAD SUCCESS
+========================= */
+
+  .upload-box.active {
+    border-color: #22c55e;
+    background: rgba(34, 197, 94, 0.08);
+  }
+
+  .upload-box.active #uploadText {
+    color: #86efac;
+    font-weight: 600;
+  }
+</style>
+
+<div class="dashboard">
+  <!-- TOP BAR -->
+  <div class="top-bar">
+    <h2>Modulo Carga de Datos</h2>
+
+    <a href="{% url 'cargar_datos' %}" class="btn"> 🔄 Nuevo Dataset </a>
+  </div>
+
+  <!-- STATUS DATASET -->
+  {% if cantidad_registros %}
+  <div class="dataset-status loaded">✅ Dataset cargado correctamente</div>
+  {% else %}
+  <div class="dataset-status empty">⚠️ No hay dataset cargado</div>
+  {% endif %} {% if dataset_limpio %}
+  <div class="status-badge clean">
+    🟢 Dataset preprocesado correctamente (limpio y listo para análisis)
+  </div>
+  {% else %}
+  <div class="status-badge raw">🔴 Dataset sin preprocesamiento aplicado</div>
+  {% endif %} {% if reporte %}
+
+  <div class="card">
+    <div class="title">🧼 Reporte de Preprocesamiento</div>
+
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-value">{{ reporte.registros_antes }}</div>
+
+        <div class="kpi-title">Registros Originales</div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-value">{{ reporte.registros_despues }}</div>
+
+        <div class="kpi-title">Registros Limpios</div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-value">{{ reporte.nulos_eliminados }}</div>
+
+        <div class="kpi-title">Nulos Eliminados</div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-value">{{ reporte.duplicados_eliminados }}</div>
+
+        <div class="kpi-title">Duplicados Eliminados</div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-value">{{ reporte.fechas_invalidas }}</div>
+
+        <div class="kpi-title">Fechas Inválidas</div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-value">{{ reporte.columnas_detectadas }}</div>
+
+        <div class="kpi-title">Columnas Detectadas</div>
+      </div>
+    </div>
+  </div>
+
+  {% endif %}
+
+  <!-- KPI -->
+  {% if cantidad_registros %}
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-value">{{cantidad_registros}}</div>
+      <div class="kpi-title">Registros</div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-value">{{cantidad_columnas}}</div>
+      <div class="kpi-title">Columnas</div>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- MAIN GRID -->
+  <div class="grid">
+    <!-- LEFT -->
+    <div class="card">
+      <div class="title">📁 Cargar Dataset</div>
+
+      <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div
+          class="upload-box"
+          id="uploadBox"
+          onclick="document.getElementById('file').click()"
+        >
+          <div id="uploadText">📂 Arrastra o selecciona CSV</div>
+
+          <input type="file" id="file" name="archivo" hidden />
+        </div>
+
+        <div style="text-align: center; margin-top: 12px">
+          <button class="btn">Procesar</button>
+        </div>
+
+        <div
+          style="
+            margin-top: 20px;
+            padding: 14px;
+            border-radius: 12px;
+            background: rgba(59, 130, 246, 0.08);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            font-size: 13px;
+            line-height: 1.7;
+          "
+        >
+          <strong style="color: #60a5fa">
+            ⚙️ Proceso Inteligente de Preprocesamiento
+          </strong>
+
+          <ul style="margin-top: 10px; padding-left: 18px; color: #cbd5e1">
+            <li>✔ Limpieza automática de datos nulos</li>
+            <li>✔ Eliminación de registros duplicados</li>
+            <li>✔ Conversión y validación de fechas</li>
+            <li>✔ Ordenamiento cronológico temporal</li>
+            <li>✔ Generación de indicadores técnicos</li>
+            <li>✔ Preparación para modelos LSTM y ARIMA</li>
+          </ul>
+        </div>
+      </form>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="card">
+      <div class="title">📈 Visualización</div>
+
+      {% if grafico %} {{ grafico|safe }} {% endif %}
+    </div>
+  </div>
+
+  <!-- TABLE -->
+  {% if datos_original %}
+  <div class="card">
+    <div class="title">📄 Datos Originales</div>
+
+    <div class="table-wrapper">{{ datos_original|safe }}</div>
+  </div>
+  {% endif %}
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const fileInput = document.getElementById("file");
+    const uploadText = document.getElementById("uploadText");
+    const uploadBox = document.getElementById("uploadBox");
+
+    if (fileInput) {
+      fileInput.addEventListener("change", function () {
+        if (this.files && this.files.length > 0) {
+          const fileName = this.files[0].name;
+
+          uploadText.innerHTML = `
+          ✅ Archivo adjuntado
+          <br>
+          <strong>${fileName}</strong>
+        `;
+
+          uploadBox.classList.add("active");
+        }
+      });
+    }
+
+    const form = document.querySelector("form");
+
+    if (form) {
+      form.addEventListener("submit", function () {
+        const loader = document.getElementById("loader");
+
+        if (loader) {
+          loader.classList.remove("hidden");
+        }
+      });
+    }
+  });
+</script>
+
+{% endblock %}

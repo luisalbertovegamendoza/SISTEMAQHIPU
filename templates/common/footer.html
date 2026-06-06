@@ -1,0 +1,86 @@
+<!-- FOOTER -->
+<footer class="bg-black text-light pt-5 pb-4 border-top border-secondary">
+  <div class="container">
+    <div class="row text-center text-md-start g-4">
+      <!-- LOGO -->
+      <div class="col-md-4">
+        <h4 class="fw-bold mb-3">
+          <i class="bi bi-graph-up-arrow text-primary"></i>
+          Qhipu
+        </h4>
+
+        <p class="text-secondary">
+          Plataforma moderna de análisis financiero con gráficos interactivos,
+          señales predictivas e indicadores técnicos en tiempo real.
+        </p>
+      </div>
+
+      <!-- ENLACES -->
+      <div class="col-md-4">
+        <h5 class="mb-3">Secciones</h5>
+
+        <ul class="list-unstyled">
+          <li class="mb-2">
+            <a
+              href="{% url 'dashboard' %}"
+              class="text-decoration-none text-secondary footer-link"
+            >
+              <i class="bi bi-speedometer2"></i> Dashboard
+            </a>
+          </li>
+
+          <li class="mb-2">
+            <a
+              href="{% url 'analisis_tecnico' %}"
+              class="text-decoration-none text-secondary footer-link"
+            >
+              <i class="bi bi-bar-chart"></i> Análisis Tecnico
+            </a>
+          </li>
+
+          <li class="mb-2">
+            <a
+              href="{% url 'prediccion' %}"
+              class="text-decoration-none text-secondary footer-link"
+            >
+              <i class="bi bi-currency-bitcoin"></i> Prediccion IA
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- REDES -->
+      <div class="col-md-4">
+        <h5 class="mb-3">Síguenos</h5>
+
+        <div
+          class="d-flex gap-3 justify-content-center justify-content-md-start"
+        >
+          <a href="#" class="text-light fs-4">
+            <i class="bi bi-facebook"></i>
+          </a>
+
+          <a href="#" class="text-light fs-4">
+            <i class="bi bi-instagram"></i>
+          </a>
+
+          <a href="#" class="text-light fs-4">
+            <i class="bi bi-twitter-x"></i>
+          </a>
+
+          <a href="#" class="text-light fs-4">
+            <i class="bi bi-linkedin"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- LINEA -->
+    <hr class="border-secondary my-4" />
+
+    <!-- COPYRIGHT -->
+    <div class="text-center text-secondary">
+      © 2026 Qhipu | Todos los derechos reservados
+    </div>
+  </div>
+</footer>

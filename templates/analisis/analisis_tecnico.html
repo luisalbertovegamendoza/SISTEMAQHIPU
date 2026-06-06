@@ -1,0 +1,168 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+
+<style>
+  .dashboard {
+    padding: 120px 20px 60px;
+    min-height: 100vh;
+  }
+
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+    margin-bottom: 25px;
+  }
+
+  .kpi {
+    padding: 18px;
+    border-radius: 12px;
+    text-align: center;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  .kpi-title {
+    font-size: 13px;
+    opacity: 0.7;
+  }
+
+  .kpi-value {
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 5px;
+  }
+
+  .grid-layout {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 20px;
+  }
+
+  .card-box {
+    padding: 15px;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(10px);
+    overflow: hidden;
+  }
+
+  .card-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+
+  .signal-box {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    gap: 10px;
+  }
+
+  .signal {
+    padding: 8px 12px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: bold;
+    text-align: center;
+    flex: 1;
+  }
+
+  .buy {
+    background: rgba(34, 197, 94, 0.2);
+    color: #22c55e;
+  }
+
+  .sell {
+    background: rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+  }
+
+  .neutral {
+    background: rgba(148, 163, 184, 0.2);
+    color: #94a3b8;
+  }
+
+  .plotly-graph-div {
+    width: 100% !important;
+  }
+</style>
+
+<div class="dashboard container">
+  <!-- ===================== -->
+  <!-- 📊 KPI -->
+  <!-- ===================== -->
+  <div class="kpi-grid">
+    <div class="kpi">
+      <div class="kpi-title">📊 Registros</div>
+      <div class="kpi-value">{{ cantidad_registros }}</div>
+    </div>
+
+    <div class="kpi">
+      <div class="kpi-title">📁 Columnas</div>
+      <div class="kpi-value">{{ cantidad_columnas }}</div>
+    </div>
+
+    <div class="kpi">
+      <div class="kpi-title">📈 Estado</div>
+      <div class="kpi-value">ACTIVO</div>
+    </div>
+
+    <div class="kpi">
+      <div class="kpi-title">⚡ Sistema</div>
+      <div class="kpi-value">ONLINE</div>
+    </div>
+  </div>
+
+  <!-- ===================== -->
+  <!-- 📈 GRÁFICOS -->
+  <!-- ===================== -->
+  <div class="grid-layout">
+    <!-- IZQUIERDA -->
+    <div>
+      <div class="card-box">
+        <div class="card-title">📈 Tendencia del Precio</div>
+        {{ grafico_sma|safe }}
+      </div>
+
+      <div class="card-box" style="margin-top: 15px">
+        <div class="card-title">📉 MACD</div>
+        {{ grafico_macd|safe }}
+      </div>
+    </div>
+
+    <!-- DERECHA -->
+    <div>
+      <div class="card-box">
+        <div class="card-title">📊 RSI</div>
+        {{ grafico_rsi|safe }}
+      </div>
+
+      <div class="card-box" style="margin-top: 15px">
+        <div class="card-title">📌 Señales Técnicas</div>
+
+        <div class="signal-box">
+          <div class="signal buy">COMPRA</div>
+          <div class="signal sell">VENTA</div>
+          <div class="signal neutral">NEUTRAL</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== -->
+  <!-- 📄 TABLA -->
+  <!-- ===================== -->
+  <div class="card-box" style="margin-top: 20px">
+    <div class="card-title">📄 Últimos Datos</div>
+    {{ tabla_indicadores|safe }}
+  </div>
+
+  {% if error %}
+  <div class="alert alert-danger mt-3">❌ {{ error }}</div>
+  {% endif %}
+</div>
+
+{% endblock %}

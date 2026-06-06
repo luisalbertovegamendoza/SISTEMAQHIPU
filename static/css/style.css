@@ -1,0 +1,631 @@
+/* =========================
+   ESTILOS GENERALES
+========================= */
+html,
+body{
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    overflow-x: hidden;
+    font-family: Arial, Helvetica, sans-serif;
+
+    background: linear-gradient(
+        135deg,
+        #020617 0%,
+        #0f172a 45%,
+        #111827 100%
+    );
+
+    color: #f8fafc;
+}
+
+main{
+    padding-top:110px;
+}
+
+/* =========================
+   VARIABLES GLOBALES
+========================= */
+
+:root {
+
+    --bg-main: #020617;
+    --bg-secondary: #0f172a;
+    --card-bg: #111827;
+
+    --text-main: #f8fafc;
+    --text-soft: #94a3b8;
+
+    --primary: #3b82f6;
+    --primary-hover: #2563eb;
+
+    --success: #10b981;
+}
+
+
+
+/* =========================
+   NAVBAR
+========================= */
+
+.btn-primary{
+
+    background:
+        linear-gradient(
+            135deg,
+            #2563eb,
+            #3b82f6
+        );
+
+    border: none;
+
+    padding: 10px 25px;
+
+    border-radius: 30px;
+
+    transition: 0.3s;
+}
+
+.btn-primary:hover{
+
+    background:
+        linear-gradient(
+            135deg,
+            #1d4ed8,
+            #2563eb
+        );
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 10px 25px rgba(37,99,235,0.35);
+}
+
+.navbar-brand{
+    font-size: 28px;
+    font-weight: bold;
+    color: white !important;
+}
+
+.nav-link{
+
+    color: #cbd5e1 !important;
+
+    transition: 0.3s ease;
+
+    position: relative;
+}
+.nav-link:hover{
+    color: #0dcaf0 !important;
+    transform: translateY(-2px);
+}
+
+/* =========================
+   CARRUSEL
+========================= */
+
+.carousel-hero .carousel-item{
+    position: relative;
+}
+
+.carousel-hero .carousel-item img{
+    width: 100%;
+    height: 90vh;
+    object-fit: cover;
+}
+
+/* CAPA OSCURA */
+
+.carousel-hero .carousel-item::before{
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    z-index: 1;
+}
+
+/* TEXTOS */
+
+.carousel-caption{
+    z-index: 2;
+    bottom: 35%;
+    padding: 0 20px;
+}
+
+.carousel-caption h5{
+    font-size: clamp(2rem, 5vw, 4.5rem);
+    font-weight: bold;
+    color: white;
+    line-height: 1.1;
+    text-shadow: 2px 2px 10px rgba(0,0,0,0.8);
+}
+
+.carousel-caption p{
+    font-size: 1.2rem;
+    color: white;
+    text-shadow: 2px 2px 10px rgba(0,0,0,0.8);
+}
+
+/* =========================
+   TITULOS
+========================= */
+
+h2{
+    font-size: 45px;
+    font-weight: bold;
+    color: #f8fafc;
+    position: relative;
+    margin-bottom: 60px !important;
+}
+
+h2::after{
+    content: "";
+    width: 80px;
+    height: 4px;
+    background: #2563eb;
+    position: absolute;
+    left: 50%;
+    bottom: -15px;
+    transform: translateX(-50%);
+    border-radius: 20px;
+}
+
+/* =========================
+   ABOUT
+========================= */
+
+.about-section p,
+.info-section p{
+    font-size: 18px;
+    line-height: 1.8;
+    color: #cbd5e1;
+}
+
+/* =========================
+   LOGOS
+========================= */
+
+#carouselLogos .row{
+    min-height: 120px;
+}
+
+#carouselLogos img{
+    max-height: 70px;
+    object-fit: contain;
+    transition: 0.3s;
+    opacity: 0.9;
+}
+
+#carouselLogos img:hover{
+    transform: scale(1.08);
+    opacity: 1;
+}
+
+/* =========================
+   CARDS
+========================= */
+
+.card{
+
+    border:
+        1px solid rgba(255,255,255,0.06);
+
+    border-radius: 24px;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(15,23,42,0.96),
+            rgba(30,41,59,0.92)
+        );
+
+    transition: 0.35s ease;
+
+    box-shadow:
+        0 10px 35px rgba(0,0,0,0.35);
+
+    backdrop-filter: blur(12px);
+}
+
+
+.card:hover{
+
+    transform: translateY(-8px);
+
+    border-color:
+        rgba(59,130,246,0.35);
+
+    box-shadow:
+        0 15px 40px rgba(37,99,235,0.18);
+}
+
+/* TEXTO CARDS */
+
+.card-title{
+
+    color:
+        #f8fafc !important;
+
+    font-weight:
+        700;
+}
+
+.card-text{
+
+    color:
+        #cbd5e1 !important;
+
+    line-height:
+        1.7;
+}
+
+/* TITULOS INTERNOS */
+
+.card-body h3{
+
+    color:
+        #f8fafc;
+}
+
+/* PARRAFOS */
+
+.card-body p{
+
+    color:
+        #cbd5e1;
+}
+
+/* IMAGENES REDONDAS */
+
+.card-image-custom{
+    width: 220px;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 50%;
+    display: block;
+}
+
+/* =========================
+   INFO SECTION
+========================= */
+
+.info-section .card{
+    padding: 2rem;
+}
+
+.info-section img{
+    border-radius: 20px !important;
+}
+
+/* =========================
+   BOTONES
+========================= */
+
+
+.btn-primary{
+
+    background:
+        linear-gradient(
+            135deg,
+            #2563eb,
+            #3b82f6
+        );
+
+    border: none;
+
+    padding: 10px 25px;
+
+    border-radius: 30px;
+
+    transition: 0.3s;
+}
+
+.btn-primary:hover{
+
+    background:
+        linear-gradient(
+            135deg,
+            #1d4ed8,
+            #2563eb
+        );
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 10px 25px rgba(37,99,235,0.35);
+}
+
+
+
+
+
+/* =========================
+   TEXTO SECCIONES
+========================= */
+
+.card-body h3{
+    font-size: 40px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.card-body p{
+    font-size: 18px;
+}
+
+/* =========================
+   INPUT
+========================= */
+
+.custom-input::placeholder{
+    color: #9ca3af;
+}
+
+.custom-input:focus{
+    background-color: #1a1a1a;
+    color: white;
+    border-color: #0d6efd;
+    box-shadow: 0 0 10px rgba(13,110,253,0.4);
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+footer{
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(2,6,23,0.98),
+            rgba(15,23,42,0.96),
+            rgba(30,41,59,0.94)
+        );
+
+    border-top:
+        1px solid rgba(255,255,255,0.06);
+}
+footer a{
+    color: white;
+    font-size: 18px;
+    transition: 0.3s;
+}
+
+footer a:hover{
+    color: #00ff88;
+}
+
+footer i{
+    margin-right: 8px;
+}
+
+.footer-link{
+    transition: 0.3s;
+}
+
+.footer-link:hover{
+    color: #0d6efd !important;
+    padding-left: 5px;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:768px){
+
+    .carousel-hero .carousel-item img{
+        height: 65vh;
+    }
+
+    .carousel-caption{
+        bottom: 20%;
+    }
+
+    .carousel-caption h5{
+        font-size: 2rem;
+    }
+
+    .carousel-caption p{
+        font-size: 1rem;
+    }
+
+    h2{
+        font-size: 30px;
+    }
+
+    .card-body h3{
+        font-size: 28px;
+    }
+
+    .card-image-custom{
+        width: 180px;
+        height: 180px;
+    }
+
+    .info-section .card{
+        padding: 1rem;
+    }
+}
+
+@media(max-width:576px){
+
+    .carousel-caption{
+        bottom: 12%;
+    }
+
+    .carousel-caption h5{
+        font-size: 1.5rem;
+    }
+
+    .carousel-caption p{
+        display: none;
+    }
+
+    .card-image-custom{
+        width: 150px;
+        height: 150px;
+    }
+
+    .btn{
+        width: 100%;
+    }
+
+    .card-body{
+        padding: 1.5rem;
+    }
+}
+
+/* =========================
+   MODAL LOGIN
+========================= */
+
+.modal-content {
+  background: #0f172a;
+  border: 1px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(20px);
+  color: white;
+}
+
+.modal-header {
+  padding: 1.5rem 1.5rem 0.5rem;
+}
+
+.modal-body {
+  padding: 1.5rem;
+}
+
+/* TITULOS */
+
+.modal-title {
+  font-size: 1.4rem;
+  letter-spacing: 0.5px;
+}
+
+/* INPUTS */
+
+.form-control {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: white;
+  border-radius: 14px;
+  padding: 14px;
+  transition: 0.3s ease;
+}
+
+.form-control:focus {
+  background: rgba(255,255,255,0.08);
+  color: white;
+  border-color: #00d4ff;
+  box-shadow: 0 0 20px rgba(0,212,255,0.25);
+}
+
+/* LABELS */
+
+.form-label {
+  color: #cbd5e1;
+  margin-bottom: 8px;
+}
+
+/* BOTON LOGIN */
+
+.btn-info {
+  background: linear-gradient(135deg, #06b6d4, #3b82f6);
+  border: none;
+  padding: 12px;
+  transition: 0.3s ease;
+}
+
+.btn-info:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(59,130,246,0.35);
+}
+
+/* BOTON REGISTRO */
+
+.btn-success {
+  background: linear-gradient(135deg, #10b981, #22c55e);
+  border: none;
+  padding: 12px;
+  transition: 0.3s ease;
+}
+
+.btn-success:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(34,197,94,0.35);
+}
+
+/* BOTON CERRAR */
+
+.btn-close {
+  filter: invert(1);
+}
+
+/* ANIMACION */
+
+.modal.fade .modal-dialog {
+  transform: scale(0.9);
+  transition: 0.3s ease;
+}
+
+.modal.show .modal-dialog {
+  transform: scale(1);
+}
+
+/* FONDO OSCURO */
+
+.modal-backdrop.show {
+  opacity: 0.8;
+}
+
+/* PLACEHOLDER */
+
+.form-control::placeholder {
+  color: #94a3b8;
+}
+
+
+.companies-section{
+
+    background:
+        linear-gradient(
+            135deg,
+            #0f172a,
+            #111827
+        );
+}
+
+/* =========================
+   NAVBAR PREMIUM
+========================= */
+
+.custom-navbar{
+
+    background:
+        rgba(2,6,23,0.72);
+
+    backdrop-filter:
+        blur(18px);
+
+    -webkit-backdrop-filter:
+        blur(18px);
+
+    border-bottom:
+        1px solid rgba(255,255,255,0.06);
+
+    padding:
+        14px 0;
+
+    transition:
+        0.3s ease;
+
+    z-index:
+        999;
+}
+
+/* PAGINA CARGAR DATOS*/
+
+
+   

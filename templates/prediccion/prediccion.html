@@ -1,0 +1,142 @@
+{% extends 'base.html' %} {% block content %}
+
+<div class="container mt-5">
+  <h2 class="mb-4">Predicción con Inteligencia Artificial</h2>
+
+  <hr />
+
+  {% if error %}
+
+  <div class="alert alert-danger"><strong>Error:</strong> {{ error }}</div>
+
+  {% else %}
+
+  <!-- RESUMEN PRINCIPAL -->
+
+  <div class="row">
+    <div class="col-md-3 mb-3">
+      <div class="card text-center shadow">
+        <div class="card-body">
+          <h6>Precio Actual</h6>
+          <h3>S/ {{ precio_actual }}</h3>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3 mb-3">
+      <div class="card text-center shadow">
+        <div class="card-body">
+          <h6>Precio Predicho</h6>
+          <h3>S/ {{ precio_predicho }}</h3>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3 mb-3">
+      <div class="card text-center shadow">
+        <div class="card-body">
+          <h6>Retorno Esperado</h6>
+          <h3>{{ retorno }}%</h3>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3 mb-3">
+      <div class="card text-center shadow">
+        <div class="card-body">
+          <h6>Señal IA</h6>
+          <h3>{{ senal }}</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TENDENCIA -->
+
+  <div class="card shadow mb-4">
+    <div class="card-body">
+      <h4>Tendencia Detectada</h4>
+
+      <h2>{{ tendencia }}</h2>
+
+      <p>{{ interpretacion }}</p>
+    </div>
+  </div>
+
+  <!-- RANGO DE CONFIANZA -->
+
+  <div class="row">
+    <div class="col-md-4 mb-3">
+      <div class="card shadow text-center">
+        <div class="card-body">
+          <h6>Precio Mínimo Esperado</h6>
+          <h4>S/ {{ minimo }}</h4>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+      <div class="card shadow text-center">
+        <div class="card-body">
+          <h6>Precio Máximo Esperado</h6>
+          <h4>S/ {{ maximo }}</h4>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+      <div class="card shadow text-center">
+        <div class="card-body">
+          <h6>Confianza del Modelo</h6>
+          <h4>{{ confianza }}%</h4>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INDICADORES TÉCNICOS -->
+
+  <div class="card shadow mb-4">
+    <div class="card-body">
+      <h4>Indicadores Técnicos</h4>
+
+      <table class="table table-striped">
+        <tr>
+          <th>RSI</th>
+          <td>{{ rsi }}</td>
+        </tr>
+
+        <tr>
+          <th>MACD</th>
+          <td>{{ macd }}</td>
+        </tr>
+
+        <tr>
+          <th>SMA 10</th>
+          <td>{{ sma10 }}</td>
+        </tr>
+
+        <tr>
+          <th>SMA 30</th>
+          <td>{{ sma30 }}</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- GRÁFICO -->
+
+  {% if grafico %}
+
+  <div class="card shadow">
+    <div class="card-body">
+      <h4>Gráfico de Predicción</h4>
+
+      {{ grafico|safe }}
+    </div>
+  </div>
+
+  {% endif %} {% endif %}
+</div>
+
+{% endblock %}
