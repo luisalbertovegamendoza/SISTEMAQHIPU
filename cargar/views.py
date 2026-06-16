@@ -37,6 +37,41 @@ def cargar_datos(request):
                 encoding='utf-8-sig'
             )
 
+            print(df_raw.columns.tolist())
+
+
+            # ==========================
+# ADAPTAR CSV DE LA BVL
+# ==========================
+
+            df_raw.columns = df_raw.columns.str.strip()
+
+            df_raw.rename(columns={
+                 'Fecha de cotización': 'Fecha',
+                 'Fecha de cotizaciÃ³n': 'Fecha',
+
+                 'Máximo': 'Maximo',
+                 'MÃ¡ximo': 'Maximo',
+
+                 'Mínimo': 'Minimo',
+                 'MÃ­nimo': 'Minimo',
+
+                 'Cantidad negociada': 'Volumen'
+                    }, inplace=True)
+
+# Conservar solo las columnas necesarias
+            df_raw = df_raw[
+                 [
+                  'Fecha',
+                  'Apertura',
+                  'Cierre',
+                  'Maximo',
+                  'Minimo',
+                  'Volumen'
+    ]
+]
+
+
             # ====================================
             # 🧼 LIMPIAR DATOS
             # ====================================
@@ -157,6 +192,8 @@ def cargar_datos(request):
                 if_exists='append',
                 index=False
             )
+
+            request.session["datos_cargados"] = True
 
             print("✅ DATOS GUARDADOS EN POSTGRESQL")
 

@@ -11,16 +11,26 @@
         {% if user.is_authenticated %}
 
         <li class="nav-item">
-          <a class="nav-link" href="#">Dashboard</a>
+          <a class="nav-link" href="{% url 'cargar_datos' %}"> Cargar </a>
+        </li>
+
+        {% if request.session.datos_cargados %}
+
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'dashboard' %}"> Dashboard </a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'cargar_datos' %}">Cargar</a>
+          <a class="nav-link" href="{% url 'analisis_tecnico' %}">
+            Análisis Técnico
+          </a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'analisis_tecnico' %}">Análisis</a>
+          <a class="nav-link" href="{% url 'prediccion' %}"> Predicción IA </a>
         </li>
+
+        {% endif %}
 
         <li class="nav-item">
           <span class="nav-link text-info"> 👤 {{ user.username }} </span>

@@ -53,6 +53,8 @@ def ejecutar_prediccion(df):
     # =========================
     data_scaled = scaler_X.transform(data.values)
 
+  
+
     # =========================
     # RESHAPE LSTM
     # =========================
@@ -68,7 +70,11 @@ def ejecutar_prediccion(df):
 
     pred = scaler_y.inverse_transform(pred_scaled)[0][0]
 
+    print("Predicción Django:", pred)
+
     return float(pred)
+
+   
 
 def predecir_historico(df):
 
@@ -89,10 +95,20 @@ def predecir_historico(df):
 
     fechas = []
 
-    for i in range(window_size, len(data_scaled)):
+    # =========================
+    # OPTIMIZACIÓN
+    # =========================
+    # Antes:
+    # for i in range(window_size, len(data_scaled))
+    #
+    # Ahora:
+    # calcula una predicción cada 3 registros
+    # =========================
+
+    for i in range(window_size, len(data_scaled), 3):
 
         X = data_scaled[
-            i-window_size:i
+            i - window_size:i
         ]
 
         X = X.reshape(

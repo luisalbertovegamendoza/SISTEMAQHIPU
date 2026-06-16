@@ -1,5 +1,8 @@
-from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from cargar.utils import usuario_tiene_datos
+from django.contrib import messages
+from django.shortcuts import redirect, render
+
 
 import pandas as pd
 
@@ -12,8 +15,21 @@ from .graficos import (
 )
 
 
+
+
+
+
 @login_required
 def analisis_tecnico(request):
+    if not usuario_tiene_datos(request.user):
+
+        messages.warning(
+            request,
+            "Primero debe cargar datos históricos."
+        )
+
+        return redirect("cargar")
+    
 
     tabla_indicadores = None
     grafico_sma = None
@@ -158,3 +174,4 @@ def analisis_tecnico(request):
             'error': error,
         }
     )
+

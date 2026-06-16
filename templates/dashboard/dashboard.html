@@ -1,0 +1,215 @@
+{% extends 'base.html' %} {% block content %}
+<style>
+  body {
+    background: #0b1220;
+  }
+
+  .dashboard-title {
+    color: white;
+    font-weight: 700;
+    margin-bottom: 25px;
+  }
+
+  .kpi-card {
+    background: rgba(17, 24, 39, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 18px;
+    padding: 20px;
+    color: white;
+    text-align: center;
+    transition: 0.3s;
+    height: 100%;
+  }
+
+  .kpi-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  }
+
+  .kpi-title {
+    color: #9ca3af;
+    font-size: 13px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .kpi-value {
+    font-size: 28px;
+    font-weight: bold;
+  }
+
+  .card-green {
+    border-left: 5px solid #10b981;
+  }
+
+  .card-blue {
+    border-left: 5px solid #3b82f6;
+  }
+
+  .card-yellow {
+    border-left: 5px solid #f59e0b;
+  }
+
+  .card-red {
+    border-left: 5px solid #ef4444;
+  }
+
+  .section-card {
+    background: rgba(17, 24, 39, 0.9);
+    border-radius: 18px;
+    padding: 25px;
+    margin-top: 25px;
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .section-title {
+    margin-bottom: 20px;
+    font-weight: 600;
+  }
+
+  .decision-box {
+    text-align: center;
+    padding: 30px;
+    border-radius: 18px;
+    font-size: 32px;
+    font-weight: bold;
+  }
+
+  .compra {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+  }
+
+  .venta {
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+  }
+
+  .esperar {
+    background: rgba(245, 158, 11, 0.15);
+    color: #f59e0b;
+  }
+</style>
+
+<div class="container mt-4">
+  <h2>📈 Dashboard Financiero</h2>
+
+  {% if error %}
+  <div class="alert alert-danger">{{ error }}</div>
+  {% else %}
+
+  <div class="row g-3">
+    <div class="col-md-3">
+      <div class="kpi-card card-blue">
+        <div class="kpi-title">Precio Actual</div>
+        <div class="kpi-value">S/ {{ precio_actual }}</div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="kpi-card card-green">
+        <div class="kpi-title">Precio IA</div>
+        <div class="kpi-value">S/ {{ precio_predicho }}</div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="kpi-card card-yellow">
+        <div class="kpi-title">Retorno Esperado</div>
+        <div class="kpi-value">{{ retorno }}%</div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="kpi-card card-red">
+        <div class="kpi-title">Señal IA</div>
+        <div class="kpi-value">{{ senal }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <h4 class="section-title">📊 Indicadores Técnicos</h4>
+
+    <div class="row g-3">
+      <div class="col-md-3">
+        <div class="kpi-card">
+          <div class="kpi-title">RSI</div>
+          <div class="kpi-value">{{ rsi }}</div>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="kpi-card">
+          <div class="kpi-title">MACD</div>
+          <div class="kpi-value">{{ macd }}</div>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="kpi-card">
+          <div class="kpi-title">SMA10</div>
+          <div class="kpi-value">{{ sma10 }}</div>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="kpi-card">
+          <div class="kpi-title">SMA30</div>
+          <div class="kpi-value">{{ sma30 }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <h4 class="section-title">📈 Predicción Financiera</h4>
+
+    {{ grafico|safe }}
+  </div>
+
+  <div class="section-card">
+    <h4 class="section-title">🧠 Decisión del Sistema</h4>
+
+    <div
+      class="decision-box {% if senal == 'COMPRA' %} compra {% elif senal == 'VENTA' %} venta {% else %} esperar {% endif %}"
+    >
+      {{ senal }}
+    </div>
+  </div>
+
+  <div class="row g-3 mb-4">
+    <div class="col-md-3">
+      <div class="kpi-card card-green">
+        <div class="kpi-title">Score IA</div>
+        <div class="kpi-value">{{ score_ia }}/100</div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="kpi-card card-blue">
+        <div class="kpi-title">Nivel IA</div>
+        <div class="kpi-value">{{ nivel_ia }}</div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="kpi-card card-yellow">
+        <div class="kpi-title">Riesgo</div>
+        <div class="kpi-value">{{ riesgo }}</div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="kpi-card card-red">
+        <div class="kpi-title">Ganancia Potencial</div>
+        <div class="kpi-value">S/ {{ ganancia_potencial }}</div>
+      </div>
+    </div>
+  </div>
+
+  {% endif %}
+</div>
+
+{% endblock %}

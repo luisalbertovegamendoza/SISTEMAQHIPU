@@ -12,7 +12,7 @@ urlpatterns = [
     path('', views.index,name='index'),
     path('cargar/', include('cargar.urls')),
     path('prediccion/', include('prediccion.urls')),
-    path('dashboard/', include('dashborad.urls')),
+    path('dashboard/', include('dashboard.urls')),
     path('analisis/', include('analisis.urls')),
 
      # USUARIOS

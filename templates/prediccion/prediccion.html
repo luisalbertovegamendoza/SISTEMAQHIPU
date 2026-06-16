@@ -1,141 +1,390 @@
 {% extends 'base.html' %} {% block content %}
 
-<div class="container mt-5">
-  <h2 class="mb-4">Predicción con Inteligencia Artificial</h2>
+<style>
+  body {
+    background: #0b1220;
+  }
 
-  <hr />
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    color: white;
+  }
+
+  .badge-date {
+    background: #1f2937;
+    padding: 6px 12px;
+    border-radius: 10px;
+    font-size: 12px;
+    color: #fff;
+  }
+
+  .kpi-card {
+    background: rgba(17, 24, 39, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 18px;
+    text-align: center;
+    color: white;
+    transition: 0.2s;
+  }
+
+  .kpi-card:hover {
+    transform: scale(1.03);
+  }
+
+  .kpi-title {
+    font-size: 12px;
+    color: #9ca3af;
+    text-transform: uppercase;
+  }
+
+  .kpi-value {
+    font-size: 24px;
+    font-weight: bold;
+  }
+
+  .section-card {
+    background: rgba(17, 24, 39, 0.85);
+    border-radius: 16px;
+    padding: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: white;
+    margin-bottom: 20px;
+  }
+
+  .buy {
+    color: #22c55e;
+    font-weight: bold;
+  }
+  .sell {
+    color: #ef4444;
+    font-weight: bold;
+  }
+  .hold {
+    color: #fbbf24;
+    font-weight: bold;
+  }
+
+  /* =========================
+   TABLA FINANCIERA
+========================= */
+
+  .table-responsive {
+    overflow-x: auto;
+    border-radius: 12px;
+  }
+
+  .tabla-financiera {
+    width: 100%;
+    border-collapse: collapse;
+    background: #111827;
+    color: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+  }
+
+  .tabla-financiera thead {
+    background: #1f2937;
+  }
+
+  .tabla-financiera th {
+    padding: 15px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #9ca3af;
+    border-bottom: 1px solid #374151;
+    letter-spacing: 0.5px;
+  }
+
+  .tabla-financiera td {
+    padding: 14px;
+    text-align: center;
+    font-size: 14px;
+    border-bottom: 1px solid #1f2937;
+  }
+
+  .tabla-financiera tbody tr:nth-child(even) {
+    background: rgba(255, 255, 255, 0.03);
+  }
+
+  .tabla-financiera tbody tr:hover {
+    background: rgba(59, 130, 246, 0.12);
+    transition: all 0.3s ease;
+  }
+
+  .tabla-financiera tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  /* =========================
+   COLORES DE ERROR
+========================= */
+
+  .error-bajo {
+    color: #22c55e;
+    font-weight: bold;
+  }
+
+  .error-medio {
+    color: #fbbf24;
+    font-weight: bold;
+  }
+
+  .error-alto {
+    color: #ef4444;
+    font-weight: bold;
+  }
+
+  /* =========================
+   COLUMNAS MONETARIAS
+========================= */
+
+  .precio-real {
+    color: #60a5fa;
+    font-weight: 600;
+  }
+
+  .precio-ia {
+    color: #34d399;
+    font-weight: 600;
+  }
+
+  /* =========================
+   SCROLL PERSONALIZADO
+========================= */
+
+  .table-responsive::-webkit-scrollbar {
+    height: 8px;
+  }
+
+  .table-responsive::-webkit-scrollbar-track {
+    background: #1f2937;
+  }
+
+  .table-responsive::-webkit-scrollbar-thumb {
+    background: #374151;
+    border-radius: 20px;
+  }
+
+  .table-responsive::-webkit-scrollbar-thumb:hover {
+    background: #4b5563;
+  }
+</style>
+
+<div class="container mt-4">
+  <!-- HEADER -->
+  <div class="header">
+    <h2>📊 Plataforma IA Financiera</h2>
+    <span class="badge-date">{{ fecha_prediccion }}</span>
+  </div>
 
   {% if error %}
-
-  <div class="alert alert-danger"><strong>Error:</strong> {{ error }}</div>
-
+  <div class="alert alert-danger">{{ error }}</div>
   {% else %}
 
-  <!-- RESUMEN PRINCIPAL -->
+  <!-- =========================
+       SCORE IA
+  ========================== -->
+  <div class="section-card text-center">
+    <h4>🧠 Score de Inteligencia Artificial</h4>
 
-  <div class="row">
+    <h1 style="font-size: 42px">{{ score_ia }} / 100</h1>
+
+    <p>{{ nivel_ia }}</p>
+  </div>
+
+  <!-- =========================
+       KPIs PRINCIPALES
+  ========================== -->
+  <div class="row mb-3">
     <div class="col-md-3 mb-3">
-      <div class="card text-center shadow">
-        <div class="card-body">
-          <h6>Precio Actual</h6>
-          <h3>S/ {{ precio_actual }}</h3>
-        </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Precio Actual</div>
+        <div class="kpi-value">S/ {{ precio_actual }}</div>
       </div>
     </div>
 
     <div class="col-md-3 mb-3">
-      <div class="card text-center shadow">
-        <div class="card-body">
-          <h6>Precio Predicho</h6>
-          <h3>S/ {{ precio_predicho }}</h3>
-        </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Precio Predicho</div>
+        <div class="kpi-value">S/ {{ precio_predicho }}</div>
       </div>
     </div>
 
     <div class="col-md-3 mb-3">
-      <div class="card text-center shadow">
-        <div class="card-body">
-          <h6>Retorno Esperado</h6>
-          <h3>{{ retorno }}%</h3>
-        </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Variación</div>
+        <div class="kpi-value">{{ retorno }}%</div>
       </div>
     </div>
 
     <div class="col-md-3 mb-3">
-      <div class="card text-center shadow">
-        <div class="card-body">
-          <h6>Señal IA</h6>
-          <h3>{{ senal }}</h3>
+      <div class="kpi-card">
+        <div class="kpi-title">Señal IA</div>
+        <div class="kpi-value">
+          {% if senal == "COMPRA" %} 🟢 COMPRA FUERTE {% elif senal == "VENTA"
+          %} 🔴 VENTA FUERTE {% else %} 🟡 ESPERAR {% endif %}
         </div>
       </div>
     </div>
   </div>
 
-  <!-- TENDENCIA -->
+  <!-- =========================
+       RESULTADO IA
+  ========================== -->
+  <div class="section-card">
+    <h4>🧠 Resultado de la IA</h4>
 
-  <div class="card shadow mb-4">
-    <div class="card-body">
-      <h4>Tendencia Detectada</h4>
+    <div class="row mt-3">
+      <div class="col-md-4 text-center">
+        <h6>Rango Mínimo</h6>
+        <h3>S/ {{ minimo }}</h3>
+      </div>
 
-      <h2>{{ tendencia }}</h2>
+      <div class="col-md-4 text-center">
+        <h6>Rango Máximo</h6>
+        <h3>S/ {{ maximo }}</h3>
+      </div>
 
-      <p>{{ interpretacion }}</p>
+      <div class="col-md-4 text-center">
+        <h6>Riesgo</h6>
+        <h3>{{ riesgo }}</h3>
+      </div>
+    </div>
+
+    <hr />
+
+    <p><strong>📌 Recomendación:</strong> {{ recomendacion }}</p>
+  </div>
+
+  <!-- =========================
+       DECISIÓN FINAL
+  ========================== -->
+  <div class="section-card text-center">
+    <h4>📌 Decisión del Sistema IA</h4>
+
+    <h2>{{ decision_final }}</h2>
+
+    <p>Basado en predicción + riesgo + métricas del modelo</p>
+  </div>
+
+  <!-- =========================
+       MÉTRICAS MODELO
+  ========================== -->
+  <div class="section-card">
+    <h4>📊 Rendimiento del Modelo</h4>
+
+    <div class="row text-center mt-3">
+      <div class="col-md-3">
+        <h6>R²</h6>
+        <h3>{{ r2 }}</h3>
+      </div>
+
+      <div class="col-md-3">
+        <h6>RMSE</h6>
+        <h3>{{ rmse }}</h3>
+      </div>
+
+      <div class="col-md-3">
+        <h6>MAE</h6>
+        <h3>{{ mae }}</h3>
+      </div>
+
+      <div class="col-md-3">
+        <h6>MAPE</h6>
+        <h3>{{ mape }}%</h3>
+      </div>
     </div>
   </div>
 
-  <!-- RANGO DE CONFIANZA -->
+  <!-- =========================
+       EVALUACIÓN SEÑALES
+  ========================== -->
+  <div class="section-card">
+    <h4>📈 Evaluación de Señales</h4>
 
-  <div class="row">
-    <div class="col-md-4 mb-3">
-      <div class="card shadow text-center">
-        <div class="card-body">
-          <h6>Precio Mínimo Esperado</h6>
-          <h4>S/ {{ minimo }}</h4>
-        </div>
+    <div class="row text-center mt-3">
+      <div class="col-md-3">
+        <h6>Accuracy</h6>
+        <h3>{{ accuracy }}</h3>
       </div>
-    </div>
 
-    <div class="col-md-4 mb-3">
-      <div class="card shadow text-center">
-        <div class="card-body">
-          <h6>Precio Máximo Esperado</h6>
-          <h4>S/ {{ maximo }}</h4>
-        </div>
+      <div class="col-md-3">
+        <h6>Precision</h6>
+        <h3>{{ precision }}</h3>
       </div>
-    </div>
 
-    <div class="col-md-4 mb-3">
-      <div class="card shadow text-center">
-        <div class="card-body">
-          <h6>Confianza del Modelo</h6>
-          <h4>{{ confianza }}%</h4>
-        </div>
+      <div class="col-md-3">
+        <h6>Recall</h6>
+        <h3>{{ recall }}</h3>
+      </div>
+
+      <div class="col-md-3">
+        <h6>F1</h6>
+        <h3>{{ f1 }}</h3>
       </div>
     </div>
   </div>
 
-  <!-- INDICADORES TÉCNICOS -->
+  <!-- =========================
+       GRÁFICO
+  ========================== -->
+  {% if grafico %}
+  <div class="section-card">
+    <h4>📈 Histórico + Predicción</h4>
+    {{ grafico|safe }}
+  </div>
+  {% endif %}
 
-  <div class="card shadow mb-4">
-    <div class="card-body">
-      <h4>Indicadores Técnicos</h4>
+  <!-- =========================
+       TABLA
+  ========================== -->
 
-      <table class="table table-striped">
-        <tr>
-          <th>RSI</th>
-          <td>{{ rsi }}</td>
-        </tr>
+  {% if tabla_predicciones %}
+  <div class="section-card">
+    <h4>📊 Comparación Real vs Predicción</h4>
 
-        <tr>
-          <th>MACD</th>
-          <td>{{ macd }}</td>
-        </tr>
+    <div class="table-responsive mt-3">
+      <table class="tabla-financiera">
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th>Fecha</th>
+            <th>Precio Real</th>
+            <th>Precio IA</th>
+            <th>Error</th>
+          </tr>
+        </thead>
 
-        <tr>
-          <th>SMA 10</th>
-          <td>{{ sma10 }}</td>
-        </tr>
+        <tbody>
+          {% for fila in tabla_predicciones %}
+          <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ fila.fecha }}</td>
+            <td>S/ {{ fila.real }}</td>
+            <td>S/ {{ fila.predicho }}</td>
 
-        <tr>
-          <th>SMA 30</th>
-          <td>{{ sma30 }}</td>
-        </tr>
+            <td>
+              {% if fila.error < 0.20 %}
+              <span class="error-bajo">{{ fila.error }}</span>
+              {% elif fila.error < 0.50 %}
+              <span class="error-medio">{{ fila.error }}</span>
+              {% else %}
+              <span class="error-alto">{{ fila.error }}</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
       </table>
     </div>
   </div>
-
-  <!-- GRÁFICO -->
-
-  {% if grafico %}
-
-  <div class="card shadow">
-    <div class="card-body">
-      <h4>Gráfico de Predicción</h4>
-
-      {{ grafico|safe }}
-    </div>
-  </div>
-
   {% endif %} {% endif %}
 </div>
 

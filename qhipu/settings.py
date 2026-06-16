@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'home',
     'cargar',
     'prediccion',
-    'dashborad',
+    'dashboard',
     'analisis',
 ]
 
