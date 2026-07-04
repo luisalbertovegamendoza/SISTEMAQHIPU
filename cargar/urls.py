@@ -13,4 +13,10 @@ urlpatterns = [
         name='cargar_datos'
     ),
 
+     path(
+        'descargar/',
+        views.descargar_dataset_limpio,
+        name='descargar_dataset_limpio'
+    ),
+
 ]

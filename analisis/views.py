@@ -2,6 +2,8 @@ from django.contrib.auth.decorators import login_required
 from cargar.utils import usuario_tiene_datos
 from django.contrib import messages
 from django.shortcuts import redirect, render
+from django.http import FileResponse
+import os
 
 
 import pandas as pd
@@ -39,6 +41,7 @@ def analisis_tecnico(request):
     cantidad_registros = 0
     cantidad_columnas = 0
     error = None
+    ruta_excel = None
 
     try:
 
@@ -141,6 +144,18 @@ def analisis_tecnico(request):
 
         df = df.round(4)
 
+
+        # =========================
+# 📥 GENERAR EXCEL ANALISIS
+# =========================
+
+        ruta_excel = f"media/analisis_tecnico_{request.user.id}.xlsx"
+
+        df.to_excel(
+            ruta_excel,
+            index=False
+)
+
         tabla_indicadores = (
             df[columnas_existentes]
             .tail(30)
@@ -172,6 +187,21 @@ def analisis_tecnico(request):
             'cantidad_registros': cantidad_registros,
             'cantidad_columnas': cantidad_columnas,
             'error': error,
+            'ruta_excel': ruta_excel,
         }
     )
 
+@login_required
+def descargar_analisis_excel(request):
+
+    archivo = f"media/analisis_tecnico_{request.user.id}.xlsx"
+
+    if os.path.exists(archivo):
+
+        return FileResponse(
+            open(archivo, 'rb'),
+            as_attachment=True,
+            filename='analisis_tecnico.xlsx'
+        )
+
+    return redirect('analisis_tecnico')

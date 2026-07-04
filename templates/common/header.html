@@ -3,7 +3,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark custom-navbar fixed-top">
   <div class="container">
     <a class="navbar-brand" href="{% url 'index' %}">
-      <img src="{% static 'img/logo.jpeg' %}" height="80" />
+      <img src="{% static 'img/qhipu.png' %}" class="imagen-circular" />
     </a>
 
     <div class="collapse navbar-collapse">
@@ -17,10 +17,6 @@
         {% if request.session.datos_cargados %}
 
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'dashboard' %}"> Dashboard </a>
-        </li>
-
-        <li class="nav-item">
           <a class="nav-link" href="{% url 'analisis_tecnico' %}">
             Análisis Técnico
           </a>
@@ -28,6 +24,10 @@
 
         <li class="nav-item">
           <a class="nav-link" href="{% url 'prediccion' %}"> Predicción IA </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'dashboard' %}"> Dashboard </a>
         </li>
 
         {% endif %}

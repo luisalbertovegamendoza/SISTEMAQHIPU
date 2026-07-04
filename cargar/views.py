@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render , redirect
 from django.contrib.auth.decorators import login_required
 
 import pandas as pd
@@ -7,6 +7,8 @@ from sqlalchemy import create_engine, text
 from .preprocessing import limpiar_datos
 from .graficos import grafico_cierre
 from .models import Empresa
+from django.http import FileResponse
+import os
 
 
 @login_required
@@ -18,6 +20,7 @@ def cargar_datos(request):
     grafico = None
     error = None
     reporte = None
+    ruta_excel = None
 
     dataset_limpio = False
 
@@ -78,6 +81,28 @@ def cargar_datos(request):
 
             df_clean, reporte = limpiar_datos(df_raw)
 
+
+            df_clean['fecha'] = pd.to_datetime(
+                    df_clean['fecha'],
+                    errors='coerce'
+)
+
+            df_clean = df_clean.sort_values(
+                    by='fecha',
+                    ascending=False
+)
+
+
+
+
+            ruta_excel = f"media/dataset_limpio_{request.user.id}.xlsx"
+
+            df_clean.to_excel(
+                ruta_excel,
+                index=False
+)
+
+
             # ====================================
             # 📊 PREPARAR DATAFRAME
             # ====================================
@@ -108,6 +133,15 @@ def cargar_datos(request):
                 df_db['fecha'],
                 errors='coerce'
             )
+
+            # ====================================
+# 📅 ORDENAR POR FECHA MÁS RECIENTE
+# ====================================
+
+            df_db = df_db.sort_values(
+                 by='fecha',
+                 ascending=False
+)
 
             # ====================================
             # 🧹 LIMPIEZA FINAL
@@ -250,5 +284,28 @@ def cargar_datos(request):
 
             'reporte': reporte,
 
+        
+
+            'ruta_excel': ruta_excel if dataset_limpio else None,
+
+
         }
     )
+
+
+
+
+@login_required
+def descargar_dataset_limpio(request):
+
+    archivo = f"media/dataset_limpio_{request.user.id}.xlsx"
+
+    if os.path.exists(archivo):
+
+        return FileResponse(
+            open(archivo, 'rb'),
+            as_attachment=True,
+            filename='dataset_limpio.xlsx'
+        )
+
+    return redirect('cargar_datos')

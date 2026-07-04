@@ -105,7 +105,8 @@ def predecir_historico(df):
     # calcula una predicción cada 3 registros
     # =========================
 
-    for i in range(window_size, len(data_scaled), 3):
+    
+    for i in range(window_size, len(data_scaled)):
 
         X = data_scaled[
             i - window_size:i

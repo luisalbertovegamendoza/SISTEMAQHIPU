@@ -1,9 +1,11 @@
-from django.shortcuts import render
+
+
+from django.shortcuts import render, redirect
+from django.http import FileResponse
+import os
 from django.contrib.auth.decorators import login_required
-
 import pandas as pd
-from datetime import datetime
-
+from .models import Prediccion
 from cargar.models import StockData
 from django.shortcuts import redirect, render
 from django.contrib import messages
@@ -27,6 +29,7 @@ def prediccion_ia(request):
         return redirect("cargar")
 
     try:
+        ruta_excel = None
 
         # ==================================
         # 1. CARGAR DATOS
@@ -112,7 +115,34 @@ def prediccion_ia(request):
         # ==================================
         # 6. DATOS ADICIONALES
         # ==================================
-        fecha_prediccion = datetime.now().strftime("%d/%m/%Y %H:%M")
+        # ==================================
+# FECHA REAL DE PREDICCIÓN
+# ==================================
+
+        ultima_fecha = df["fecha"].iloc[-1]
+
+        fecha_actual = ultima_fecha.strftime("%d/%m/%Y")
+
+
+        fecha_predicha = pd.bdate_range(
+             start=ultima_fecha,
+             periods=2
+            )[1]
+
+        fecha_prediccion = fecha_predicha.strftime("%d/%m/%Y")
+
+        print("========================")
+        print("ULTIMA FECHA DATAFRAME:")
+        print(df["fecha"].iloc[-1])
+
+        print("FECHA PREDICCION:")
+        print(fecha_prediccion)
+
+        print("========================")
+
+        
+
+
 
         diferencia = round(
             resultado["precio_predicho"] - resultado["precio_actual"],
@@ -224,6 +254,100 @@ def prediccion_ia(request):
         # ==================================
         grafico, tabla_predicciones = grafico_prediccion(df)
 
+
+        # ==================================
+# 📥 EXPORTAR EXCEL PREDICCIÓN IA
+# ==================================
+
+        ruta_excel = f"media/prediccion_ia_{request.user.id}.xlsx"
+
+        # ==================================
+# HISTORIAL DE PREDICCIONES
+# ==================================
+
+        df_historial = pd.DataFrame(tabla_predicciones)
+
+        df_historial.rename(columns={
+             "fecha": "Fecha",
+            "real": "Precio_Real",
+            "predicho": "Precio_Predicho",
+            "error": "Error"
+        }, inplace=True)
+
+        df_historial["Porcentaje_Error"] = (
+            abs(df_historial["Error"])
+            / df_historial["Precio_Real"]
+            ) * 100
+
+        
+
+        df_resumen = pd.DataFrame({
+             "Fecha_Prediccion": [fecha_prediccion],
+             "Precio_Actual": [resultado["precio_actual"]],
+             "Precio_Predicho": [resultado["precio_predicho"]],
+             "Retorno": [resultado["retorno"]],
+             "RSI": [rsi],
+             "MACD": [macd],
+             "MAPE": [mape],
+             "RMSE": [rmse],
+             "MAE": [mae],
+             "Score_IA": [score_ia]
+})
+
+        
+        with pd.ExcelWriter(
+            ruta_excel,
+            engine="openpyxl"
+        ) as writer:
+
+             df_resumen.to_excel(
+                writer,
+                sheet_name="Resumen IA",
+                index=False
+    ) 
+
+             df_historial.to_excel(
+                writer,
+                sheet_name="Historial Predicciones",
+                index=False
+    )
+             
+
+
+        empresa = StockData.objects.filter(
+            usuario=request.user
+                ).first().empresa
+        
+
+        Prediccion.objects.update_or_create(
+
+            
+        usuario=request.user,
+        empresa=empresa,
+        fecha_prediccion=fecha_predicha.date(),
+        defaults={
+            "precio_actual": resultado["precio_actual"],
+            "precio_predicho": resultado["precio_predicho"],
+            "retorno": resultado["retorno"],
+            "senal": resultado["senal"],
+            "tendencia": resultado["tendencia"],
+            "interpretacion": resultado["interpretacion"],
+            "riesgo": riesgo,
+            "recomendacion": recomendacion,
+            "rsi": rsi,
+            "estado_rsi": estado_rsi,
+            "macd": macd,
+            "estado_macd": estado_macd,
+            "sma10": sma10,
+            "sma30": sma30,
+            "score_ia": score_ia,
+            "nivel_ia": nivel_ia,
+            "mae": mae,
+            "rmse": rmse,
+            "mape": mape
+    }
+)
+
         # ==================================
         # 12. CONTEXTO FINAL
         # ==================================
@@ -249,6 +373,7 @@ def prediccion_ia(request):
             "maximo": resultado["maximo"],
 
             # Fecha
+            "fecha_actual": fecha_actual,
             "fecha_prediccion": fecha_prediccion,
 
             # MÉTRICAS MODELO
@@ -278,7 +403,8 @@ def prediccion_ia(request):
             "estado_rsi": estado_rsi,
             "estado_macd": estado_macd,
 
-            "ganancia_potencial": ganancia_potencial
+            "ganancia_potencial": ganancia_potencial,
+            "ruta_excel": ruta_excel
         }
 
         return render(request, "prediccion/prediccion.html", context)
@@ -289,3 +415,17 @@ def prediccion_ia(request):
             "prediccion/prediccion.html",
             {"error": str(e)}
         )
+
+@login_required
+def descargar_prediccion_excel(request):
+
+    archivo = f"media/prediccion_ia_{request.user.id}.xlsx"
+
+    if os.path.exists(archivo):
+        return FileResponse(
+            open(archivo, 'rb'),
+            as_attachment=True,
+            filename="prediccion_ia.xlsx"
+        )
+
+    return redirect("prediccion_ia")

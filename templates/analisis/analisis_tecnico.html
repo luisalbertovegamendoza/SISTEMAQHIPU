@@ -88,12 +88,71 @@
   .plotly-graph-div {
     width: 100% !important;
   }
+
+  /* ===================== */
+  /* 📄 TABLA INDICADORES */
+  /* ===================== */
+
+  .table-container {
+    width: 100%;
+    overflow-x: auto;
+    margin-top: 15px;
+  }
+
+  .table-container table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .table-container thead th {
+    padding: 12px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+
+    background: rgba(255, 255, 255, 0.08);
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  }
+
+  .table-container tbody td {
+    padding: 10px;
+
+    text-align: center;
+
+    font-size: 13px;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .table-container tbody tr:hover {
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  .table-container tbody tr {
+    transition: 0.2s;
+  }
+
+  .card-table {
+    padding: 20px;
+
+    border-radius: 14px;
+
+    border: 1px solid rgba(255, 255, 255, 0.08);
+
+    background: rgba(255, 255, 255, 0.03);
+
+    backdrop-filter: blur(10px);
+  }
 </style>
 
 <div class="dashboard container">
   <!-- ===================== -->
   <!-- 📊 KPI -->
   <!-- ===================== -->
+
   <div class="kpi-grid">
     <div class="kpi">
       <div class="kpi-title">📊 Registros</div>
@@ -117,26 +176,49 @@
   </div>
 
   <!-- ===================== -->
+  <!-- 📥 DESCARGAR EXCEL -->
+  <!-- ===================== -->
+
+  {% if ruta_excel %}
+
+  <div class="text-center mb-4">
+    <a
+      href="{% url 'descargar_analisis_excel' %}"
+      class="btn btn-success btn-lg"
+    >
+      📊 Descargar Análisis Técnico en Excel
+    </a>
+  </div>
+
+  {% endif %}
+
+  <!-- ===================== -->
   <!-- 📈 GRÁFICOS -->
   <!-- ===================== -->
+
   <div class="grid-layout">
     <!-- IZQUIERDA -->
+
     <div>
       <div class="card-box">
         <div class="card-title">📈 Tendencia del Precio</div>
+
         {{ grafico_sma|safe }}
       </div>
 
       <div class="card-box" style="margin-top: 15px">
         <div class="card-title">📉 MACD</div>
+
         {{ grafico_macd|safe }}
       </div>
     </div>
 
     <!-- DERECHA -->
+
     <div>
       <div class="card-box">
         <div class="card-title">📊 RSI</div>
+
         {{ grafico_rsi|safe }}
       </div>
 
@@ -145,7 +227,9 @@
 
         <div class="signal-box">
           <div class="signal buy">COMPRA</div>
+
           <div class="signal sell">VENTA</div>
+
           <div class="signal neutral">NEUTRAL</div>
         </div>
       </div>
@@ -155,13 +239,21 @@
   <!-- ===================== -->
   <!-- 📄 TABLA -->
   <!-- ===================== -->
-  <div class="card-box" style="margin-top: 20px">
-    <div class="card-title">📄 Últimos Datos</div>
-    {{ tabla_indicadores|safe }}
+
+  <!-- ===================== -->
+  <!-- 📄 TABLA -->
+  <!-- ===================== -->
+
+  <div class="card-table" style="margin-top: 20px">
+    <div class="card-title">📄 Últimos Datos Técnicos</div>
+
+    <div class="table-container">{{ tabla_indicadores|safe }}</div>
   </div>
 
   {% if error %}
+
   <div class="alert alert-danger mt-3">❌ {{ error }}</div>
+
   {% endif %}
 </div>
 

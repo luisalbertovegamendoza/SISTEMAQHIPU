@@ -62,25 +62,36 @@ def login_usuario(request):
 # =====================
 # REGISTRO
 # =====================
+
+
 def registro_usuario(request):
+
+    print("ENTRO A REGISTRO")
 
     if request.method == 'POST':
 
+        first_name = request.POST.get('first_name')
         username = request.POST.get('username')
-        password = request.POST.get('password')
+        email = request.POST.get('email')
+        password1 = request.POST.get('password')
+        password2 = request.POST.get('password2')
 
-        if User.objects.filter(username=username).exists():
-            messages.error(request, "El usuario ya existe")
-            return redirect('index')
+        print("first_name:", first_name)
+        print("username:", username)
+        print("email:", email)
+        print("password1:", password1)
+        print("password2:", password2)
 
-        User.objects.create_user(username=username, password=password)
+        user = User.objects.create_user(
+            username=username,
+            email=email,
+            password=password1,
+            first_name=first_name
+        )
 
-        messages.success(request, "Usuario creado correctamente")
+        print("USUARIO CREADO")
+
         return redirect('index')
-
-    return redirect('index')
-
-
 # =====================
 # LOGOUT
 # =====================

@@ -378,16 +378,18 @@ UPLOAD SUCCESS
 <div class="dashboard">
   <!-- TOP BAR -->
   <div class="top-bar">
-    <h2>Modulo Carga de Datos</h2>
+    <h2>Centro analisis de acciones</h2>
 
-    <a href="{% url 'cargar_datos' %}" class="btn"> 🔄 Nuevo Dataset </a>
+    <a href="{% url 'cargar_datos' %}" class="btn"> 🔄 Nueva Consulta </a>
   </div>
 
   <!-- STATUS DATASET -->
   {% if cantidad_registros %}
   <div class="dataset-status loaded">✅ Dataset cargado correctamente</div>
   {% else %}
-  <div class="dataset-status empty">⚠️ No hay dataset cargado</div>
+  <div class="dataset-status empty">
+    ⚠️ No hay informacion de mercado cargado
+  </div>
   {% endif %} {% if dataset_limpio %}
   <div class="status-badge clean">
     🟢 Dataset preprocesado correctamente (limpio y listo para análisis)
@@ -490,7 +492,7 @@ UPLOAD SUCCESS
           "
         >
           <strong style="color: #60a5fa">
-            ⚙️ Proceso Inteligente de Preprocesamiento
+            ⚙️ Tecnologia utilizada por qhipu
           </strong>
 
           <ul style="margin-top: 10px; padding-left: 18px; color: #cbd5e1">
@@ -516,10 +518,17 @@ UPLOAD SUCCESS
   <!-- TABLE -->
   {% if datos_original %}
   <div class="card">
-    <div class="title">📄 Datos Originales</div>
+    <div class="title">📄 Historial de la accion analizada</div>
 
     <div class="table-wrapper">{{ datos_original|safe }}</div>
   </div>
+  {% endif %} {% if dataset_limpio %}
+
+  <a href="{% url 'descargar_dataset_limpio' %}" class="btn btn-success mt-3">
+    <i class="bi bi-file-earmark-excel"></i>
+    Descargar Dataset en Excel
+  </a>
+
   {% endif %}
 </div>
 

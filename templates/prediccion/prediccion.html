@@ -22,13 +22,37 @@
   }
 
   .kpi-card {
-    background: rgba(17, 24, 39, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 16px;
-    padding: 18px;
+    background: linear-gradient(145deg, #111827, #1f2937);
+
+    border-radius: 20px;
+
+    padding: 22px;
+
     text-align: center;
+
     color: white;
-    transition: 0.2s;
+
+    border: 1px solid rgba(255, 255, 255, 0.08);
+
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+
+    transition:
+      transform 0.3s ease,
+      box-shadow 0.3s ease;
+
+    height: 160px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+  }
+
+  .kpi-card:hover {
+    transform: translateY(-6px);
+
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.45);
   }
 
   .kpi-card:hover {
@@ -36,14 +60,23 @@
   }
 
   .kpi-title {
-    font-size: 12px;
-    color: #9ca3af;
+    font-size: 13px;
+
+    color: #94a3b8;
+
     text-transform: uppercase;
+
+    letter-spacing: 1px;
+
+    margin-bottom: 10px;
   }
 
   .kpi-value {
-    font-size: 24px;
-    font-weight: bold;
+    font-size: 32px;
+
+    font-weight: 800;
+
+    color: #f8fafc;
   }
 
   .section-card {
@@ -184,7 +217,22 @@
     <span class="badge-date">{{ fecha_prediccion }}</span>
   </div>
 
-  {% if error %}
+  <!-- =========================
+     📥 DESCARGAR EXCEL IA
+========================== -->
+
+  {% if ruta_excel %}
+
+  <div class="text-center mb-4">
+    <a
+      href="{% url 'descargar_prediccion_excel' %}"
+      class="btn btn-success btn-lg"
+    >
+      🤖 Descargar Predicción IA en Excel
+    </a>
+  </div>
+
+  {% endif %} {% if error %}
   <div class="alert alert-danger">{{ error }}</div>
   {% else %}
 
@@ -206,14 +254,20 @@
     <div class="col-md-3 mb-3">
       <div class="kpi-card">
         <div class="kpi-title">Precio Actual</div>
+
         <div class="kpi-value">S/ {{ precio_actual }}</div>
+
+        <small style="color: #9ca3af"> 📅 {{ fecha_actual }} </small>
       </div>
     </div>
 
     <div class="col-md-3 mb-3">
       <div class="kpi-card">
         <div class="kpi-title">Precio Predicho</div>
+
         <div class="kpi-value">S/ {{ precio_predicho }}</div>
+
+        <small style="color: #9ca3af"> 📅 {{ fecha_prediccion }} </small>
       </div>
     </div>
 
