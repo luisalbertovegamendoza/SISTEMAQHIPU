@@ -3,25 +3,54 @@ import json
 import joblib
 import numpy as np
 import pandas as pd
-from tensorflow.keras.models import load_model
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 MODEL_DIR = os.path.join(BASE_DIR, "modelos")
 
+modelo = None
+scaler_X = None
+scaler_y = None
+config = None
 
-# =========================
-# CARGA UNA SOLA VEZ (OPTIMIZADO)
-# =========================
-modelo = load_model(os.path.join(MODEL_DIR, "modelo_lstm_ferreycorp.keras"))
-scaler_X = joblib.load(os.path.join(MODEL_DIR, "scaler_X.pkl"))
-scaler_y = joblib.load(os.path.join(MODEL_DIR, "scaler_y.pkl"))
 
-with open(os.path.join(MODEL_DIR, "config.json"), "r") as f:
-    config = json.load(f)
+def cargar_modelo():
+    global modelo, scaler_X, scaler_y, config
+
+    if modelo is None:
+
+        print("Cargando modelo LSTM...")
+
+        from tensorflow.keras.models import load_model
+
+        modelo = load_model(
+            os.path.join(MODEL_DIR, "modelo_lstm_ferreycorp.keras"),
+            compile=False
+        )
+
+        scaler_X = joblib.load(
+            os.path.join(MODEL_DIR, "scaler_X.pkl")
+        )
+
+        scaler_y = joblib.load(
+            os.path.join(MODEL_DIR, "scaler_y.pkl")
+        )
+
+        with open(
+            os.path.join(MODEL_DIR, "config.json"),
+            "r"
+        ) as f:
+
+            config = json.load(f)
+
+        print("Modelo cargado correctamente.")
+
 
 
 def ejecutar_prediccion(df):
+
+    cargar_modelo()
+
 
     features = config["features"]
     window_size = config["window_size"]
@@ -77,6 +106,9 @@ def ejecutar_prediccion(df):
    
 
 def predecir_historico(df):
+
+    cargar_modelo()
+
 
     features = config["features"]
     window_size = config["window_size"]
