@@ -34,19 +34,29 @@ def prediccion_ia(request):
         # ==================================
         # 1. CARGAR DATOS
         # ==================================
+       
+
+
+
+        
         datos = list(
-            StockData.objects
-            .filter(usuario=request.user)
-            .order_by('fecha')
-            .values(
-                'fecha',
-                'apertura',
-                'cierre',
-                'maximo',
-                'minimo',
-                'volumen'
-            )
-        )
+                StockData.objects
+                .filter(usuario=request.user)
+                .order_by('-fecha')
+                .values(
+                      'fecha',
+                     'apertura',
+                     'cierre',
+                     'maximo',
+                    'minimo',
+                    'volumen'
+                 )[:200]   # 🔥 más liviano
+)
+
+
+
+
+
 
         df = pd.DataFrame.from_records(datos)
 
@@ -69,9 +79,17 @@ def prediccion_ia(request):
         # ==================================
         # 3. INDICADORES
         # ==================================
+       
+
+
+        df = df.tail(200)  # antes de indicadores
         df = agregar_indicadores(df)
+        df = df.tail(120)
         df = df.dropna()
         df = df.reset_index(drop=True)
+
+
+
 
         if len(df) < 60:
             raise ValueError("No existen suficientes registros para generar la predicción.")
@@ -265,7 +283,8 @@ def prediccion_ia(request):
 # HISTORIAL DE PREDICCIONES
 # ==================================
 
-        df_historial = pd.DataFrame(tabla_predicciones)
+
+        df_historial = pd.DataFrame(tabla_predicciones).tail(100)
 
         df_historial.rename(columns={
              "fecha": "Fecha",
