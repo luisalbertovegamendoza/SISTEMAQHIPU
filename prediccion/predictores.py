@@ -1,17 +1,11 @@
+from .lstm import ejecutar_prediccion
 import pandas as pd
-
-
-
-
 
 def predecir_manana(df):
 
     # =========================
     # ORDEN SEGURIDAD
     # =========================
-
-    from .lstm import ejecutar_prediccion
-
 
     df = df.sort_values("fecha")
 
